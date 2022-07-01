@@ -53,11 +53,62 @@ class AddressCodec
         if (strlen($compressedDerPubKey) === 66 && (strpos($compressedDerPubKey, '02') === 0 || strpos($compressedDerPubKey, '03') === 0)) {
             $x         = substr($compressedDerPubKey, 2, 64);
             $SECp256k1 = new SECp256k1();
-            $a = $SECp256k1->a;
-            $b = $SECp256k1->b;
-            $p = $SECp256k1->p;
+            $a         = $SECp256k1->a;
+            $b         = $SECp256k1->b;
+            $p         = $SECp256k1->p;
+            $y         = PointMathGMP::calculateYWithX($x, $a, $b, $p, substr($compressedDerPubKey, 0, 2));
 
-
+            return compact('x', 'y');
         }
+
+        if (strlen($compressedDerPubKey) === 130 && strpos($compressedDerPubKey, '04') === 0) {
+            return self::point($compressedDerPubKey);
+        }
+
+        throw new RuntimeException('Invalid compressedDerPubKey format : '.$compressedDerPubKey);
+    }
+
+    /**
+     * returns the compressed DER encoded public key.
+     *
+     * @param  array  $pubKey
+     * @return string
+     */
+    public static function compress(array $pubKey): string
+    {
+        $gmpStrVal = gmp_strval(gmp_mod(gmp_init($pubKey['y'], 16), gmp_init(2, 10)));
+        if ($gmpStrVal === "0") {
+            $compressedDerPubKey = '02'.$pubKey['x'];
+        } else {
+            $compressedDerPubKey = '03'.$pubKey['x'];
+        }
+
+        return $compressedDerPubKey;
+    }
+
+    /**
+     * @param  string  $derPubKey
+     * @return string
+     */
+    public static function hash(string $derPubKey): string
+    {
+        $sha256 = hash('sha256', hex2bin($derPubKey));
+        return hash('ripemd160', hex2bin($sha256));
+    }
+
+    /**
+     * returns the Bitcoin address version of the Publick Key
+     *
+     * @param $hex
+     * @param $prefix
+     * @return string
+     */
+    public static function encode(string $hex, string $prefix = "00"): string
+    {
+        $hex_with_prefix = $prefix.$hex;
+        $sha256          = hash('sha256', hex2bin($hex_with_prefix));
+        $checksum        = hash('sha256', hex2bin($sha256));
+        $address         = $hex_with_prefix.substr($checksum, 0, 8);
+        return Base58::Encode($address);
     }
 }
