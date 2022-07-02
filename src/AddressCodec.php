@@ -99,8 +99,8 @@ class AddressCodec
     /**
      * returns the Bitcoin address version of the Publick Key
      *
-     * @param $hex
-     * @param $prefix
+     * @param  string  $hex
+     * @param  string  $prefix
      * @return string
      */
     public static function encode(string $hex, string $prefix = "00"): string
@@ -109,6 +109,35 @@ class AddressCodec
         $sha256          = hash('sha256', hex2bin($hex_with_prefix));
         $checksum        = hash('sha256', hex2bin($sha256));
         $address         = $hex_with_prefix.substr($checksum, 0, 8);
-        return Base58::Encode($address);
+        return Base58::encode($address);
+    }
+
+    public static function decode($address)
+    {
+        return substr(Base58::decode($address), 2, -8);
+    }
+
+
+    public static function WIF($private_key, $prefix = '80', $compressed = true): string
+    {
+        if ($compressed) {
+            $private_key .= '01';
+        }
+        return strrev(self::encode($private_key, $prefix));
+    }
+
+    /**
+     * @param $wif
+     * @param  bool  $compressed
+     * @return false|string
+     */
+    public static function deWIF($wif, bool $compressed = true)
+    {
+        $base58 = strrev($wif);
+        $hex    = self::decode($base58);
+        if ($compressed) {
+            $hex = substr($hex, 0, -2);
+        }
+        return $hex;
     }
 }
