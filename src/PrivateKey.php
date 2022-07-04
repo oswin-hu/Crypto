@@ -95,7 +95,7 @@ class PrivateKey
      * returns the X and Y point coordinates of the public key.
      *
      * @return array Point
-     * @throws \Exception
+     * @throws Exception
      */
     public function getPubKeyPoints(): array
     {
