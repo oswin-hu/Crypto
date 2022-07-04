@@ -25,77 +25,24 @@ class Base58
      */
     private static function permutation_lookup($char, bool $reverse = false)
     {
-        $table = [
-            '1',
-            '2',
-            '3',
-            '4',
-            '5',
-            '6',
-            '7',
-            '8',
-            '9',
-            'A',
-            'B',
-            'C',
-            'D',
-            'E',
-            'F',
-            'G',
-            'H',
-            'J',
-            'K',
-            'L',
-            'M',
-            'N',
-            'P',
-            'Q',
-            'R',
-            'S',
-            'T',
-            'U',
-            'V',
-            'W',
-            'X',
-            'Y',
-            'Z',
-            'a',
-            'b',
-            'c',
-            'd',
-            'e',
-            'f',
-            'g',
-            'h',
-            'i',
-            'j',
-            'k',
-            'm',
-            'n',
-            'o',
-            'p',
-            'q',
-            'r',
-            's',
-            't',
-            'u',
-            'v',
-            'w',
-            'x',
-            'y',
-            'z'
-        ];
+        $number        = ['1', '2', '3', '4', '5', '6', '7', '8', '9'];
+        $lower         = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'];
+        $table         = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'J', 'K', 'L', 'M', 'N', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
+        $table         = array_merge($number, $table, $lower);
+
+
+        $reversedTable = $table[$char] ?? null;
 
         if ($reverse) {
-            $reversedTable = array();
+            $rev = [];
             foreach ($table as $key => $element) {
-                $reversedTable[$element] = $key;
+                $rev[$element] = $key;
             }
 
-            return $reversedTable[$char] ?? null;
+            $reversedTable =  $rev[$char] ?? null;
         }
 
-        return $table[$char] ?? null;
+        return $reversedTable;
     }
 
     /**
@@ -129,11 +76,7 @@ class Base58
             $i++;
         }
 
-        if ($littleEndian) {
-            return strrev($res.$leading);
-        }
-
-        return $res.$leading;
+        return $littleEndian ? strrev($res.$leading):$res.$leading;
     }
 
     /**
