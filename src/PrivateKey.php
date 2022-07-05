@@ -34,17 +34,18 @@ class PrivateKey
      */
     public function __construct($private_key = null)
     {
-        if (empty($private_key)) {
-            $this->generateRandomPrivateKey();
-        } else {
-            $this->setPrivateKey($private_key);
-        }
         $SECp256k1 = new SECp256k1();
         $this->n   = $SECp256k1->n;
         $this->G   = $SECp256k1->G;
         $this->a   = $SECp256k1->a;
         $this->b   = $SECp256k1->b;
         $this->p   = $SECp256k1->p;
+        if (empty($private_key)) {
+            $this->generateRandomPrivateKey();
+        } else {
+            $this->setPrivateKey($private_key);
+        }
+
     }
 
 
@@ -79,10 +80,10 @@ class PrivateKey
     /***
      * set a private key.
      *
-     * @param  String Hex $k
+     * @param  string Hex $k
      * @throws Exception
      */
-    public function setPrivateKey($k): void
+    public function setPrivateKey(string $k): void
     {
         //private key has to be passed as an hexadecimal number
         if (gmp_cmp(gmp_init($k, 16), gmp_sub($this->n, gmp_init(1, 10))) === 1) {
