@@ -151,7 +151,7 @@ class PointMathGMP
      */
     public static function calculateYWithX($x, $a, $b, $p, $derEvenOrOddCode = null): ?array
     {
-        $resY = nulll;
+        $resY = null;
 
         $x  = gmp_init($x, 16);
         $y2 = gmp_mod(gmp_add(gmp_add(gmp_powm($x, gmp_init(3, 10), $p), gmp_mul($a, $x)), $b), $p);
@@ -217,6 +217,25 @@ class PointMathGMP
         $y  = gmp_mod(gmp_pow(gmp_init($y, 16), 2), $p);
 
         return gmp_cmp($y2, $y) === 0;
+    }
+
+
+    // Checks is the given number (DEC String) is even
+    public static function isEvenNumber($number): bool
+    {
+        return (((int)$number[strlen($number) - 1]) & 1) === 0;
+    }
+
+
+    /***
+     * Returns Negated Point (Y).
+     *
+     * @param $point array(GMP, GMP)
+     * @return array(GMP, GMP)
+     */
+    public static function negatePoint(array $point): array
+    {
+        return ['x' => $point['x'], 'y' => gmp_neg($point['y'])];
     }
 
 }

@@ -16,9 +16,7 @@ class PointMathGMPTest extends TestCase
 
     public function testMulPoint(): void
     {
-        $secp256k1 = new SECp256k1();
-        $n = $secp256k1->n;
-        print_r($n);
+        echo 000 & 1;
 
     }
 }
