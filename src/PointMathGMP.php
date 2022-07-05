@@ -147,9 +147,9 @@ class PointMathGMP
      * @param $b
      * @param $p
      * @param  null  $derEvenOrOddCode
-     * @return array|null|String
+     * @return array|null|string
      */
-    public static function calculateYWithX($x, $a, $b, $p, $derEvenOrOddCode = null): ?array
+    public static function calculateYWithX($x, $a, $b, $p, $derEvenOrOddCode = null)
     {
         $resY = null;
 
