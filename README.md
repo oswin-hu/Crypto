@@ -28,9 +28,7 @@ Currently, the following items are working
 
 The AddressCodec class provides a simple interface for common Zetacoin/Bitcoin (and compatable) address functions.  Load the following classes in your PHP code:
 ```PHP
-include 'Base58.class.php';
-include 'PointMathGMP.class.php';
-include 'AddressCodec.class.php';
+use Crypto\AddressCodec;
 ```
 
 The most basic example, get the X and Y coordnates of a DER Encoded public key (old format)
