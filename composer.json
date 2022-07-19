@@ -1,5 +1,5 @@
 {
-    "name": "oswin/crypto",
+    "name": "oswin.hu/crypto",
     "description": "Crypto tool library",
     "license": "MIT",
     "authors": [
@@ -20,11 +20,6 @@
     "autoload": {
         "psr-4": {
             "Crypto\\": "src/"
-        }
-    },
-    "autoload-dev": {
-        "psr-4": {
-            "Test\\": "test/"
         }
     }
 }
